@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: stg_btc
+    columns:
+      - name: HASH_KEY
+        tests:
+          - unique
+          - not_null
+  - name: stg_btc_outputs
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_btc_outputs_py')
+  
+  - name: whale_alert
+    latest_version: 1
+    config:
+      contract:
+        enforced: true
+    columns:
+    - name: output_address
+      data_type: string
+      data_tests:
+        - assert_valid_btc_address
+    - name: total_sent
+      data_type: float
+    - name: tx_count
+      data_type: int
+    - name: total_sent_usd
+      data_type: float
+
+    versions:
+      - v: 1
+        deprecation_date: 2026-01-01
+        # Matches what's above
+      - v: 2
+        # Breaking change: removed total_sent_usd
+        columns:
+          - include: all
+            exclude: [total_sent_usd]
+
+exposures:
+
+  - name: btc_whale_alert_exposure
+    label: BTC Whale alert
+    type: dashboard
+    maturity: high
+    url: https://lookerstudio.google.com/reporting/02a910cd-def6-4c62-a6e7-0ebf260ec8d3
+    description: >
+      BTC Whale alert transactions report?
+
+    depends_on:
+      - ref('whale_alert', v=1)
+
+    owner:
+      name: David Dias
