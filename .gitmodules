@@ -1,0 +1,9 @@
+[submodule "api-airflow-dbt-superset-proj"]
+	path = api-airflow-dbt-superset-proj
+	url = https://github.com/DavidEMDias/api-airflow-dbt-superset-proj
+[submodule "dbt-btc-project"]
+	path = dbt-btc-project
+	url = https://github.com/DavidEMDias/dbt-btc-project
+[submodule "gades-proj-final"]
+	path = gades-proj-final
+	url = https://github.com/DavidEMDias/gades-proj-final
